@@ -5,6 +5,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         drawerLayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -32,20 +36,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
-        switch (item.getItemId()) {
-            case 1000007:
-                // Логика для открытия домашней страницы
-                fragment = new HomeFragment();
-                break;
-            case 1000001:
-                // Логика для открытия страницы аниме
-                fragment = new AnimeFragment();
-                break;
-            case 1000006:
-                // Логика для открытия страницы манга
-                fragment = new MangaFragment();
-                break;
-            // Добавьте остальные кейсы для элементов меню
+        int id = item.getItemId();
+        if (id == R.id.nav_home) {
+            // Логика для открытия домашней страницы
+            fragment = new HomeFragment();
+        }
+        else
+        if (id == R.id.nav_anime) {
+            // Логика для открытия страницы аниме
+            fragment = new AnimeFragment();
+        }
+        else
+        if (id == R.id.nav_manga) {
+            // Логика для открытия страницы манга
+            fragment = new MangaFragment();
         }
 
         if (fragment != null) {
@@ -57,5 +61,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
